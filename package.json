@@ -1,0 +1,24 @@
+{
+  "name": "apisuite",
+  "version": "1.0.0",
+  "description": "API Automation testing using Newman",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Hani Khan <hanikhan18@live.com>",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "jquery": "^3.3.1",
+    "newman": "^4.1.0",
+    "newman-reporter-html": "^1.0.2",
+    "socket.io": "^2.1.1",
+    "unirest": "^0.5.1"
+  }
+}

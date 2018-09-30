@@ -1,0 +1,333 @@
+{
+	"info": {
+		"_postman_id": "94ac81ef-d8ff-45eb-be09-8ca635a35154",
+		"name": "PostmanExamples",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "tests",
+			"item": [
+				{
+					"name": "TestPersonAll",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"postman.setGlobalVariable(\"loadHelpers\", function loadHelpers() {",
+									"    let helpers = {};",
+									"",
+									"    helpers.verifyCount = function verifyCount(expectedCount) {",
+									"        var jsonData = JSON.parse(responseBody);",
+									"        tests[\"Response count is: \" + expectedCount] = jsonData.length === expectedCount;",
+									"    }",
+									"",
+									"    // ...additional helpers",
+									"",
+									"    return helpers;",
+									"} + '; loadHelpers();');",
+									"",
+									"",
+									"",
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"tests[\"Response time is less than 200ms\"] = responseTime < 200;",
+									"",
+									"var expectedString = \"email1@email.na\"",
+									"tests[\"Body cointains string: \" + expectedString] = responseBody.has(expectedString);",
+									"",
+									"var helpers = eval(globals.loadHelpers);",
+									"helpers.verifyCount(4);",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:9000/person/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"person",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PersonSave",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 11,\n  \"firstName\": \"FN1\",\n  \"lastName\": \"LN1\",\n  \"email\": \"email1@email.na\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:9000/person/save",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"person",
+								"save"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TestPersonCountAfterSave",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var helpers = eval(globals.loadHelpers);",
+									"helpers.verifyCount(5);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:9000/person/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"person",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PersonRemove",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:9000/person/remove",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"person",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TestPersonCountAfterRemove",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var helpers = eval(globals.loadHelpers);",
+									"helpers.verifyCount(4);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:9000/person/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"person",
+								"all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PersonAll",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody)",
+							"var size = jsonData.length",
+							"var index = parseInt(Math.random() * size)",
+							"postman.setGlobalVariable(\"userId\", index);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:9000/person/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"person",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PersonGet",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:9000/person/get/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"person",
+						"get",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SecuredBooksGlobal",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var timeInSeconds = parseInt((new Date()).getTime() / 1000);",
+							"var sigString = postman.getGlobalVariable(\"apiKey\") + postman.getGlobalVariable(\"secretKey\") + timeInSeconds",
+							"var token = CryptoJS.SHA256(sigString);",
+							"postman.setGlobalVariable(\"token\", token);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:9000/secure/books?apiKey={{apiKey}}&token={{token}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"secure",
+						"books"
+					],
+					"query": [
+						{
+							"key": "apiKey",
+							"value": "{{apiKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SecuredBooksEnvironment",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var timeInSeconds = parseInt((new Date()).getTime() / 1000);",
+							"var sigString = environment.apiKey + environment.secretKey + timeInSeconds",
+							"var token = CryptoJS.SHA256(sigString);",
+							"postman.setEnvironmentVariable(\"token\", token);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:9000/secure/books?apiKey={{apiKey}}&token={{token}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"secure",
+						"books"
+					],
+					"query": [
+						{
+							"key": "apiKey",
+							"value": "{{apiKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

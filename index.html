@@ -1,0 +1,274 @@
+<html>
+
+<head>
+    <title>API Collection Runner</title>
+    <style type="text/css">
+        body {
+            font-family: Lato, Arial;
+            color: #fff;
+            padding: 20px;
+            background-color: #e74c3c;
+        }
+
+        input{
+            height: 30px;
+            width: 400px;
+        }
+
+        button{
+            width: 200px;
+            height: 40px;
+            padding-left: 20px;
+            padding-right: 20px;
+            margin-right: 30px;
+        }
+        h1 {
+            font-weight: normal;
+            font-size: 40px;
+            font-weight: normal;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        h1 span {
+            font-size: 13px;
+            display: block;
+            padding-left: 4px;
+        }
+
+        p {
+            margin-top: 20px;
+        }
+
+        a {
+            font-weight: normal;
+            font-size: 20px;
+            font-weight: normal;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        p a {
+            text-transform: uppercase;
+            text-decoration: none;
+            display: inline-block;
+            color: #fff;
+            padding: 5px 10px;
+            margin: 0 5px;
+            background-color: #b83729;
+            -moz-transition: all 0.2s ease-in;
+            -o-transition: all 0.2s ease-in;
+            -webkit-transition: all 0.2s ease-in;
+            transition: all 0.2s ease-in;
+        }
+
+        select{
+            height: 30px;
+        }
+
+        p a:hover {
+            background-color: #ab3326;
+        }
+
+        .select-hidden {
+            display: none;
+            visibility: hidden;
+            padding-right: 10px;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        textarea.ta20em {
+            height: 20em;
+            width: 1000px;
+        }
+
+        .select {
+            cursor: pointer;
+            display: inline-block;
+            position: relative;
+            font-size: 16px;
+            color: #fff;
+            width: 220px;
+            height: 40px;
+        }
+
+        .select-styled {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: #c0392b;
+            padding: 8px 15px;
+            -moz-transition: all 0.2s ease-in;
+            -o-transition: all 0.2s ease-in;
+            -webkit-transition: all 0.2s ease-in;
+            transition: all 0.2s ease-in;
+        }
+
+        .select-styled:after {
+            content: "";
+            width: 0;
+            height: 0;
+            border: 7px solid transparent;
+            border-color: #fff transparent transparent transparent;
+            position: absolute;
+            top: 16px;
+            right: 10px;
+        }
+
+        .select-styled:hover {
+            background-color: #b83729;
+        }
+
+        .select-styled:active,
+        .select-styled.active {
+            background-color: #ab3326;
+        }
+
+        .select-styled:active:after,
+        .select-styled.active:after {
+            top: 9px;
+            border-color: transparent transparent #fff transparent;
+        }
+
+        .select-options {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            left: 0;
+            z-index: 999;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            background-color: #ab3326;
+        }
+
+        .select-options li {
+            margin: 0;
+            padding: 12px 0;
+            text-indent: 15px;
+            border-top: 1px solid #962d22;
+            -moz-transition: all 0.15s ease-in;
+            -o-transition: all 0.15s ease-in;
+            -webkit-transition: all 0.15s ease-in;
+            transition: all 0.15s ease-in;
+        }
+
+        .select-options li:hover {
+            color: #c0392b;
+            background: #fff;
+        }
+
+        .select-options li[rel="hide"] {
+            display: none;
+        }
+    </style>
+    <script type="text/javascript">
+        function httpGet(theUrl) {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("GET", theUrl, false);
+            xmlHttp.send(null);
+            return xmlHttp.responseText;
+        }
+        function checkURLValid(){
+            var url = document.getElementById('postman_url').value;
+            var expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+            var regex = new RegExp(expression);
+            if (url.match(regex)) {
+                console.log(url);
+                console.log(url.indexOf('getpostman.com/collections/'));
+                if(url.indexOf('getpostman.com/collections/') == -1){
+                    alert("Invalid POSTMAN URL");
+                    document.getElementById('postman_url').value='';    
+                }
+                else{
+                    var environmentToRun = document.getElementById('env').value;
+                    var hosturl = window.location.host;
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", location.protocol + '//' + hosturl + '/runTestsUsingPostman', true);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.send(JSON.stringify([{ postmanLink: url }, { environment: environmentToRun }]));
+                }
+            } else {
+                alert("Invalid POSTMAN URL");
+                document.getElementById('postman_url').value='';
+            }
+        }
+        function populateDDs() {
+            var url = window.location.host;
+            var testjson = JSON.parse(httpGet(location.protocol + '//' + url + '/tests'));
+            var envjson = JSON.parse(httpGet(location.protocol + '//' + url + '/env'));
+            var tests = document.getElementById("tests");
+            var envs = document.getElementById("env");
+            //Add the Options to the tests dropdown.
+            for (var i = 0; i < testjson.length; i++) {
+                var option = document.createElement("OPTION");
+                option.innerHTML = testjson[i].fileName;
+                option.value = testjson[i].fileName;
+                tests.options.add(option);
+            }
+            //Add the Options to the env dropdown.
+            for (var i = 0; i < envjson.length; i++) {
+                var option = document.createElement("OPTION");
+                option.innerHTML = envjson[i].fileName;
+                option.value = envjson[i].fileName;
+                envs.options.add(option);
+            }
+        }
+        window.onload = populateDDs;
+        function runTests() {
+            document.getElementById('socketLogs').value = '';
+            var url = window.location.host;
+            var environmentToRun = document.getElementById('env').value;
+            var testsToRun = document.getElementById('tests').value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", location.protocol + '//' + url + '/runTests', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify([{ test: testsToRun }, { environment: environmentToRun }]));
+        }
+        function goToReport() {
+            var url = window.location.host;
+            window.open(location.protocol + '//' + url + '/result/htmlResults.html');
+        }
+    </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+        socket.on('message', function (data) {
+            document.getElementById('socketLogs').value += data + '\n';
+            console.log(data);
+        });
+    </script>
+</head>
+
+<body>
+    <h1>API Collection Runner</h1>
+    <p><b><label>Select a predefined API Test Suite:       </label> </b><select id="tests"></select></p>
+    <h3>OR</h3>
+    <p>
+            <b><label>Enter a POSTMAN collections URL:   </label></b>
+            <input id="postman_url" placeholder="Paste your POSTMAN Collection link here" ... />
+          </p>
+    <br>
+    <h3>Select Environment to run the tests against</h3>
+    <select id="env">
+    </select>
+    <br><br><br>
+    <button onclick=runTests()>
+        Run Test using predefined API Suite
+    </button><button onclick=checkURLValid()>
+        Run Test using POSTMAN Collection URL
+    </button>
+    <br><br>
+    <a href='#' target="_self" onclick=goToReport()>See Reports>></a><br><br>
+    <div class="container">
+        <textarea id="socketLogs" class='ta20em'></textarea>
+    </div>
+</body>
+
+</html>
