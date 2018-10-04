@@ -27,7 +27,7 @@ newman run -e <environment>.json <collection>.json --reporters cli,html --report
 ```
 * Run the following command to run a collection directly using a shareable link from POSTMAN:
 ```
-‘newman run https://www.getpostman.com/collections/XXXXX -e <environment>.json --reporters cli,html --reporter-html-template <template_file>.hbs --reporter-html-export <report>.html’
+newman run https://www.getpostman.com/collections/XXXXX -e <environment>.json --reporters cli,html --reporter-html-template <template_file>.hbs --reporter-html-export <report>.html
 ```
 * Reports can be accessed under the path specified for `--reporter-html-export` parameter on CLI.
 
