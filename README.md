@@ -21,9 +21,13 @@
 * Once the tests are complete, the reports can be accessed by clicking the `SEE REPORTS>>` link on the UI
 
 ### Running tests from Command Line:
-* Run the following command using CLI:
+* Run the following command using CLI(Exported collections file is available):
 ```
 newman run -e <environment>.json <collection>.json --reporters cli,html --reporter-html-template <template_file>.hbs --reporter-html-export <report>.html
+```
+* Run the following command to run a collection directly using a shareable link from POSTMAN:
+```
+‘newman run https://www.getpostman.com/collections/XXXXX -e <environment>.json --reporters cli,html --reporter-html-template <template_file>.hbs --reporter-html-export <report>.html’
 ```
 * Reports can be accessed under the path specified for `--reporter-html-export` parameter on CLI.
 
