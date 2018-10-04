@@ -31,6 +31,12 @@ newman run -e <environment>.json <collection>.json --reporters cli,html --report
 ```
 * Reports can be accessed under the path specified for `--reporter-html-export` parameter on CLI.
 
+## Built With
+* [Express](https://github.com/expressjs/express)
+* [socket.io](https://github.com/socketio/socket.io)
+* [newman](https://github.com/postmanlabs/newman)
+* [awesome-newman-html-template](https://github.com/MarcosEllys/awesome-newman-html-template) - Reporting template
+
 ### Future Enhancements
  1. Ability to store multiple reports based on timestamp/testsuite/test environment
  2. Integrate the UI along with reports within a Chrome Extension
