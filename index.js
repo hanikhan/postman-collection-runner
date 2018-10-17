@@ -90,7 +90,10 @@ app.post('/runTests', (req, res) => {
         res.end();
     }).on('script', function (err, summary) {
         sendDataToClient('Starting new request :' + summary.item.name)
-    })
+    }).on('request', function(err, args) {
+        if (err) console.log(err);
+        sendDataToClient(args.response.stream.toString());
+      });
 });
 
 app.post('/runTestsUsingPostman', (req, res) => {
@@ -125,7 +128,10 @@ app.post('/runTestsUsingPostman', (req, res) => {
             res.end();
         }).on('script', function (err, summary) {
             sendDataToClient('Starting new request :' + summary.item.name)
-        })
+        }).on('request', function(err, args) {
+            if (err) console.log(err);
+            sendDataToClient(args.response.stream.toString());
+          });
     })
 });
 
