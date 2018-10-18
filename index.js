@@ -93,6 +93,16 @@ app.post('/runTests', (req, res) => {
     }).on('request', function(err, args) {
         if (!err)
         sendDataToClient(args.response.stream.toString());
+      }).on('console', function(err, args) {
+        if (err)
+        { 
+            sendDataToClient('collection run encountered an error.' + err);
+        }
+        else{
+             args.messages.forEach(function(message){
+                sendDataToClient('Console Output:'+message);
+            });
+        }
       });
 });
 
@@ -131,6 +141,16 @@ app.post('/runTestsUsingPostman', (req, res) => {
         }).on('request', function(err, args) {
             if (!err)
             sendDataToClient(args.response.stream.toString());
+          }).on('console', function(err, args) {
+            if (err)
+            { 
+                sendDataToClient('collection run encountered an error.' + err);
+            }
+            else{
+                 args.messages.forEach(function(message){
+                    sendDataToClient('Console Output:'+message);
+                });
+            }
           });
     })
 });
